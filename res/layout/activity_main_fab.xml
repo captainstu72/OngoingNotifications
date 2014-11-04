@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+    <include layout="@layout/activity_main"/>
+
+	<ImageButton
+	    android:id="@+id/fabAddNotification"
+	    android:layout_width="@dimen/round_button_diameter"
+	    android:layout_height="@dimen/round_button_diameter"
+	    android:layout_gravity="end|bottom"
+	    android:layout_marginBottom="@dimen/add_button_margin"
+	    android:layout_marginEnd="@dimen/add_button_margin"
+	    android:background="@drawable/oval_ripple"
+	    android:elevation="@dimen/elevation_low"
+	    android:outlineProvider="background"
+	    android:src="@drawable/ic_add_24px"
+	    android:stateListAnimator="@anim/button_elevation"
+	    android:tint="@android:color/white"
+        android:onClick="buttonClicked"/>
+
+</FrameLayout>

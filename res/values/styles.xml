@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Material.Light.DarkActionBar">
+	    <!-- customize the color palette -->
+	    <item name="android:colorPrimary">@color/md_primary_500</item>
+	    <item name="android:colorPrimaryDark">@color/md_primary_700</item>
+	    <item name="android:colorAccent">@color/md_accent</item>
+	    <item name="android:windowContentTransitions">true</item>
+		<!-- specify enter and exit transitions -->
+<!-- 		<item name="android:windowEnterTransition">@transition/explode</item>
+		<item name="android:windowExitTransition">@transition/explode</item> -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+</resources>

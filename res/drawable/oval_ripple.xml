@@ -1,0 +1,10 @@
+<!-- res/anim/button_elevation.xml -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/md_accent_a100">
+    <!-- android:color="?android:colorControlHighlight"> -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="?android:colorAccent"/>
+        </shape>
+    </item>
+</ripple>
