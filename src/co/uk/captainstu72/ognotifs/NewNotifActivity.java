@@ -1,7 +1,6 @@
 package co.uk.captainstu72.ognotifs;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,7 +14,8 @@ import android.widget.CheckBox;
 
 public class NewNotifActivity extends Activity {
 	
-    NotificationManager nManager;
+    private NotificationManager nManager;
+    private DatabaseHelper mDB ;
     
     final static String KEY_NOTIFICATION_ID = "NOTIF_ID";
 
@@ -24,6 +24,7 @@ public class NewNotifActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_notif);
         nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mDB = new DatabaseHelper(this);
 	}
 
 	@Override
@@ -46,7 +47,6 @@ public class NewNotifActivity extends Activity {
 	}
 	
     public void buttonClicked(View v) {
-    	Intent i;    	
     	switch (v.getId()) {
 	    	case R.id.fabAddNotification:
 	    		boolean ongoing = ((CheckBox) findViewById(R.id.cbPersistent)).isChecked();
@@ -55,25 +55,31 @@ public class NewNotifActivity extends Activity {
     	}
     }
 	
-    public void createNotification(String title, String text, String ticker, int icon, boolean autocancel, boolean ongoing) {
-    	int notifId = (int) System.currentTimeMillis();
-        Notification.Builder ncomp = new Notification.Builder(this);
-        ncomp.setContentTitle(title);
-        ncomp.setContentText(text);
-        ncomp.setTicker(ticker);
-        ncomp.setSmallIcon(icon);
-        ncomp.setAutoCancel(autocancel);
-        ncomp.setOngoing(ongoing);
-        
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        Bundle bundle = new Bundle();
-        bundle.putInt(KEY_NOTIFICATION_ID, notifId);
-        intent.putExtras(bundle);
-        ncomp.setExtras(bundle);
-        PendingIntent activity = PendingIntent.getActivity(this, notifId, intent, 0);
-        ncomp.setContentIntent(activity);
-        Log.d("createNotification","KEY_NOTIFICATION_ID: " + notifId);
-        nManager.notify(notifId,ncomp.build());
-    }
+	public void createNotification(String title, String text, String ticker, int icon, boolean autocancel, boolean ongoing) {
+		int notifId = (int) System.currentTimeMillis();
+		Notification.Builder ncomp = new Notification.Builder(this);
+		ncomp.setContentTitle(title);
+		ncomp.setContentText(text);
+		ncomp.setTicker(ticker);
+		ncomp.setSmallIcon(icon);
+		ncomp.setAutoCancel(autocancel);
+		ncomp.setOngoing(ongoing);
+		
+		Intent intent = new Intent(this, KillOffDialogActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Bundle bundle = new Bundle();
+		bundle.putInt(KEY_NOTIFICATION_ID, notifId);
+		intent.putExtras(bundle);
+		ncomp.setExtras(bundle);
+		PendingIntent activity = PendingIntent.getActivity(this, notifId, intent, 0);
+		ncomp.setContentIntent(activity);
+		Log.d("createNotification","KEY_NOTIFICATION_ID: " + notifId);
+		nManager.notify(notifId,ncomp.build());
+		
+		//insert into SQLite
+		if (ongoing) {
+			mDB.insertNotif(notifId, title, text, ticker, icon, ongoing);
+			Log.d("createNotification", "table rowcount: " + String.valueOf(mDB.numberOfRows()));
+		}
+	}
 }

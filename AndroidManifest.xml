@@ -42,6 +42,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.uk.captainstu72.ognotifs.MainActivity" />
         </activity>
+        
+        <activity
+            android:name=".KillOffDialogActivity"
+            android:theme="@android:style/Theme.Material.Light.Dialog.NoActionBar"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.uk.captainstu72.ognotifs.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
