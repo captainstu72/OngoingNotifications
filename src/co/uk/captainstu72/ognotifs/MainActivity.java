@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
 
     private TextView txtView;
     private NotificationReceiver nReceiver;
+    private DatabaseHelper mDB ;
     String[] values;
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
@@ -39,6 +40,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main_fab);
         
         nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mDB = new DatabaseHelper(this);
+        
         txtView = (TextView) findViewById(R.id.textView);
         
         nReceiver = new NotificationReceiver();
@@ -46,29 +49,7 @@ public class MainActivity extends Activity {
         filter.addAction("co.uk.captainstu72.ognotifs.NOTIFICATION_LISTENER_EXAMPLE");
         registerReceiver(nReceiver,filter);
 
-
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();        
-        processIntent(getIntent());    
-    }    
-
-	@Override
-	protected void onNewIntent(Intent intent) {     
-	    //processIntent(intent);
-	};
-	
-	private void processIntent(Intent intent){
-        if (intent.getExtras() != null) {
-        	int notifId = getIntent().getExtras().getInt(KEY_NOTIFICATION_ID);
-        	Log.d("onResume","KEY_NOTIFICATION_ID:" + notifId);
-            if (notifId > 0 ) {
-            	clearNotification(notifId, this);
-            }
-        }
-	}
 
     @Override
     protected void onDestroy() {
@@ -126,32 +107,6 @@ public class MainActivity extends Activity {
 	    		break;
     	}
     	
-    }
-    
-    private void clearNotification(final int notifId, final Context c) {
-    	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-    	    @Override
-    	    public void onClick(DialogInterface dialog, int which) {
-    	        switch (which){
-    	        case DialogInterface.BUTTON_POSITIVE:
-    	            //Yes button clicked
-    	        	nManager.cancel(notifId);
-    	            Log.d("clearNotification","Notification ID: " + notifId);
-    	        	Toast.makeText(c, "notifId:" + notifId, Toast.LENGTH_SHORT).show();
-    	        	Toast.makeText(c, "Yes", Toast.LENGTH_SHORT).show();
-    	        	
-    	            break;
-
-    	        case DialogInterface.BUTTON_NEGATIVE:
-    	            //No button clicked
-    	            break;
-    	        }
-    	    }
-    	};
-
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setMessage("Kill this notification?").setPositiveButton("Yes", dialogClickListener)
-    	    .setNegativeButton("No", dialogClickListener).show();
     }
     
     public void createNotification(String title, String text, String ticker, int icon, boolean autocancel, boolean ongoing) {
