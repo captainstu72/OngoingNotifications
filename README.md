@@ -1,8 +1,7 @@
-OngoingNotifications
-====================
-
+# OngoingNotifications #
 OngoingNotifications
 
-* Dependencies
-
+## Dependencies ##
 No libraries. Latest ADT tools, Eclipse, and SDK needed.
+
+

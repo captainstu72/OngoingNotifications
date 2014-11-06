@@ -11,11 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 public class NewNotifActivity extends Activity {
 	
     private NotificationManager nManager;
-    private DatabaseHelper mDB ;
+    private DatabaseHelper mDB;
+    private EditText etTitle;
+    private EditText etText;
     
     final static String KEY_NOTIFICATION_ID = "NOTIF_ID";
 
@@ -25,6 +28,8 @@ public class NewNotifActivity extends Activity {
 		setContentView(R.layout.activity_new_notif);
         nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mDB = new DatabaseHelper(this);
+        etTitle = (EditText) findViewById(R.id.etTitle);
+        etText = (EditText) findViewById(R.id.etText);
 	}
 
 	@Override
@@ -50,7 +55,13 @@ public class NewNotifActivity extends Activity {
     	switch (v.getId()) {
 	    	case R.id.fabAddNotification:
 	    		boolean ongoing = ((CheckBox) findViewById(R.id.cbPersistent)).isChecked();
-	    		createNotification("My Notification","My Text", "My Ticker", R.drawable.ic_launcher, false, ongoing);
+	    		createNotification(
+		    				  etTitle.getText().toString()
+		    				, etText.getText().toString()
+		    				, "My Ticker"
+		    				, R.drawable.ic_done_24px
+		    				, false, ongoing
+	    				);
 	    		break;
     	}
     }
@@ -58,12 +69,6 @@ public class NewNotifActivity extends Activity {
 	public void createNotification(String title, String text, String ticker, int icon, boolean autocancel, boolean ongoing) {
 		int notifId = (int) System.currentTimeMillis();
 		Notification.Builder ncomp = new Notification.Builder(this);
-		ncomp.setContentTitle(title);
-		ncomp.setContentText(text);
-		ncomp.setTicker(ticker);
-		ncomp.setSmallIcon(icon);
-		ncomp.setAutoCancel(autocancel);
-		ncomp.setOngoing(ongoing);
 		
 		Intent intent = new Intent(this, KillOffDialogActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -72,8 +77,19 @@ public class NewNotifActivity extends Activity {
 		intent.putExtras(bundle);
 		ncomp.setExtras(bundle);
 		PendingIntent activity = PendingIntent.getActivity(this, notifId, intent, 0);
-		ncomp.setContentIntent(activity);
 		Log.d("createNotification","KEY_NOTIFICATION_ID: " + notifId);
+		
+		ncomp.setContentTitle(title)
+		.setContentText(text)
+		.setTicker(ticker)
+		.setSmallIcon(icon)
+		.setColor(this.getResources().getColor(R.color.md_primary_500))
+		.setAutoCancel(autocancel)
+		.setOngoing(ongoing)
+        .addAction(R.drawable.ic_done_24px, "Done", activity); //If we wanted to add a done button,
+		// we could also add an action to open an app...
+
+		//ncomp.setContentIntent(activity);
 		nManager.notify(notifId,ncomp.build());
 		
 		//insert into SQLite

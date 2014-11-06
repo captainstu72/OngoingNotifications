@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -87,9 +88,6 @@ public class MainActivity extends Activity {
     public void buttonClicked(View v) {
     	Intent i;    	
     	switch (v.getId()) {
-	    	case R.id.btnCreateNotify:
-	    		createNotification("My Notification","My Text", "My Ticker", R.drawable.ic_launcher, true, false);
-	    		break;
 	    	case R.id.btnClearNotify:
 	            i = new Intent("co.uk.captainstu72.ognotifs.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
 	            i.putExtra("command","clearall");
@@ -105,30 +103,62 @@ public class MainActivity extends Activity {
 	    		startActivity(new Intent(this, NewNotifActivity.class)
 	    			, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 	    		break;
+	    	case R.id.btnRestoreNotifs:
+	    		//restore all notifications stored in the database
+	    		restoreOngoing();
+	    		break;
     	}
     	
     }
     
-    public void createNotification(String title, String text, String ticker, int icon, boolean autocancel, boolean ongoing) {
-    	int notifId = (int) System.currentTimeMillis();
+    public void restoreOngoing() {
+    	//This will restore the stored notifications from the database. Perhaps this could be run on phone startup
+    	ArrayList<Integer> alNotifs = mDB.getAllNotifs();
+    	for (int id : alNotifs) {
+    		Cursor rs = mDB.getNotif(id);
+    		rs.moveToFirst();
+    		restoreNotification(
+    				rs.getInt(rs.getColumnIndex(DatabaseHelper.colNotifID))
+    			, rs.getString(rs.getColumnIndex(DatabaseHelper.colTitle))
+    			, rs.getString(rs.getColumnIndex(DatabaseHelper.colText))
+    			, rs.getString(rs.getColumnIndex(DatabaseHelper.colTicker))
+    			, rs.getInt(rs.getColumnIndex(DatabaseHelper.colIcon))
+    			, false
+    			, true); //Could call ongoing, but we are only storing ongoing.
+    		
+    		if (!rs.isClosed()) 
+            {
+               rs.close();
+            }
+    		
+    	}
+    		
+    }
+    
+    public void restoreNotification(int id,String title, String text, String ticker, int icon, boolean autocancel, boolean ongoing) {
         Notification.Builder ncomp = new Notification.Builder(this);
-        ncomp.setContentTitle(title);
-        ncomp.setContentText(text);
-        ncomp.setTicker(ticker);
-        ncomp.setSmallIcon(icon);
-        ncomp.setAutoCancel(autocancel);
-        ncomp.setOngoing(ongoing);
         
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, KillOffDialogActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Bundle bundle = new Bundle();
-        bundle.putInt(KEY_NOTIFICATION_ID, notifId);
+        bundle.putInt(KEY_NOTIFICATION_ID, id);
         intent.putExtras(bundle);
         ncomp.setExtras(bundle);
-        PendingIntent activity = PendingIntent.getActivity(this, notifId, intent, 0);
-        ncomp.setContentIntent(activity);
-        Log.d("createNotification","KEY_NOTIFICATION_ID: " + notifId);
-        nManager.notify(notifId,ncomp.build());
+        PendingIntent activity = PendingIntent.getActivity(this, id, intent, 0);
+		
+		ncomp.setContentTitle(title)
+		.setContentText(text)
+		.setTicker(ticker)
+		.setSmallIcon(R.drawable.ic_done_24px)
+		.setColor(this.getResources().getColor(R.color.md_primary_500))
+		.setAutoCancel(autocancel)
+		.setOngoing(ongoing)
+        .addAction(R.drawable.ic_done_24px, "Done", activity); //If we wanted to add a done button,
+		// we could also add an action to open an app...
+		
+        //ncomp.setContentIntent(activity);
+        Log.d("createNotification","KEY_NOTIFICATION_ID: " + id);
+        nManager.notify(id,ncomp.build());
     }
 
     class NotificationReceiver extends BroadcastReceiver{

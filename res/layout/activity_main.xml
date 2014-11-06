@@ -28,13 +28,34 @@
         android:onClick="buttonClicked"
         android:text="Clear All Notification" />
 
+    <Button
+        android:id="@+id/btnListNotify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnClearNotify"
+        android:layout_alignRight="@+id/btnClearNotify"
+        android:layout_below="@+id/btnClearNotify"
+        android:onClick="buttonClicked"
+        android:text="List of Notification" />
+    
+    <Button
+        android:id="@+id/btnRestoreNotifs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnClearNotify"
+        android:layout_alignRight="@+id/btnClearNotify"
+        android:layout_below="@+id/btnListNotify"
+        android:onClick="buttonClicked"
+        android:text="Restore Notifs" />
+    
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignLeft="@+id/btnListNotify"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/btnListNotify"
-        android:layout_below="@+id/btnListNotify" >
+        android:layout_below="@+id/btnRestoreNotifs" >
 
         <TextView
             android:id="@+id/textView"
@@ -51,15 +72,5 @@
         android:layout_below="@+id/btnListNotify" >
 
     </ListView> -->
-
-    <Button
-        android:id="@+id/btnListNotify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnClearNotify"
-        android:layout_alignRight="@+id/btnClearNotify"
-        android:layout_below="@+id/btnClearNotify"
-        android:onClick="buttonClicked"
-        android:text="List of Notification" />
 
 </RelativeLayout>

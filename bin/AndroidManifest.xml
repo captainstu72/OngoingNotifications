@@ -45,7 +45,6 @@
         
         <activity
             android:name=".KillOffDialogActivity"
-            android:theme="@android:style/Theme.Material.Light.Dialog.NoActionBar"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

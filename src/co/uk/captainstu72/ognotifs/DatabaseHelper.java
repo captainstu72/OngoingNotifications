@@ -3,8 +3,11 @@
  */
 package co.uk.captainstu72.ognotifs;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -25,10 +28,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	static final String colIcon ="notifIcon";
 	static final String colOngoing = "notifOngoing";
 	
-
+	static final int DB_VERS = 1;
 
 	public DatabaseHelper(Context context) {
-		super(context, dbName, null, 1); 
+		super(context, dbName, null, DB_VERS); 
 	}
 
 	@Override
@@ -54,6 +57,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 		// Write this if we ever change the structure
 		// Appending new fields by version code most likely. 
+		// guides tend to say delete the table and recreate the DB. Just no.
+		
+		// use the versions to work out what changes to make
 		
 	}
 	
@@ -61,7 +67,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public int numberOfRows(){
 		SQLiteDatabase db = this.getReadableDatabase();
 		int numRows = (int) DatabaseUtils.queryNumEntries(db, notifTable);
+		db.close();
 		return numRows;
+	}
+	
+
+	public Cursor getNotif(int id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor res =  db.rawQuery( "SELECT * FROM " + notifTable + " WHERE " + colNotifID + " = " + id, null );
+//		db.close();
+		return res;
+	}
+	
+	public ArrayList<Integer> getAllNotifs() {
+		ArrayList<Integer> array_list = new ArrayList<Integer>();
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor res =  db.rawQuery( "SELECT " + colNotifID + " FROM " + notifTable, null );
+		res.moveToFirst();
+		while(res.isAfterLast() == false) {
+			array_list.add(res.getInt(res.getColumnIndex(colNotifID)));
+			res.moveToNext();
+		}
+//		db.close();
+		return array_list;
 	}
 	
 	//
@@ -88,6 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//connect to the database writeable as we are deleting
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(notifTable, colNotifID + " = ?", new String[] { Integer.toString(id) });
+		db.close();
 		return id;		
 	}
 

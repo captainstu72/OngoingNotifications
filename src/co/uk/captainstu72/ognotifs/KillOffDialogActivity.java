@@ -26,6 +26,7 @@ public class KillOffDialogActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_kill);
         nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mDB = new DatabaseHelper(this);
 	}
@@ -43,10 +44,12 @@ public class KillOffDialogActivity extends Activity {
 
 	private void processIntent(Intent intent){
 		if (intent.getExtras() != null) {
-			int notifId = getIntent().getExtras().getInt(KEY_NOTIFICATION_ID);
+			Integer notifId = getIntent().getExtras().getInt(KEY_NOTIFICATION_ID);
 			Log.d("onResume","KEY_NOTIFICATION_ID:" + notifId);
-			if (notifId > 0 ) {
+			if (!(notifId == null)) {
 				clearNotification(notifId, this);
+			} else {
+				finish();
 			}
 		}
 	}
