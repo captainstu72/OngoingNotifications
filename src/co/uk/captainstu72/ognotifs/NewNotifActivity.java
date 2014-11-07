@@ -62,6 +62,7 @@ public class NewNotifActivity extends Activity {
 		    				, R.drawable.ic_done_24px
 		    				, false, ongoing
 	    				);
+	    		finish();
 	    		break;
     	}
     }
@@ -70,13 +71,14 @@ public class NewNotifActivity extends Activity {
 		int notifId = (int) System.currentTimeMillis();
 		Notification.Builder ncomp = new Notification.Builder(this);
 		
-		Intent intent = new Intent(this, KillOffDialogActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Intent killInent = new Intent(this, KillOffDialogActivity.class);
+		killInent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Bundle bundle = new Bundle();
 		bundle.putInt(KEY_NOTIFICATION_ID, notifId);
-		intent.putExtras(bundle);
+		killInent.putExtras(bundle);
 		ncomp.setExtras(bundle);
-		PendingIntent activity = PendingIntent.getActivity(this, notifId, intent, 0);
+		PendingIntent killActivity = PendingIntent.getActivity(this, notifId, killInent, 0);
+		 
 		Log.d("createNotification","KEY_NOTIFICATION_ID: " + notifId);
 		
 		ncomp.setContentTitle(title)
@@ -86,7 +88,7 @@ public class NewNotifActivity extends Activity {
 		.setColor(this.getResources().getColor(R.color.md_primary_500))
 		.setAutoCancel(autocancel)
 		.setOngoing(ongoing)
-        .addAction(R.drawable.ic_done_24px, "Done", activity); //If we wanted to add a done button,
+		.addAction(R.drawable.ic_done_24px, "Done", killActivity); //If we wanted to add a done button,
 		// we could also add an action to open an app...
 
 		//ncomp.setContentIntent(activity);

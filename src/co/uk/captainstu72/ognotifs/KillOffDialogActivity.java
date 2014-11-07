@@ -26,7 +26,7 @@ public class KillOffDialogActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_kill);
+//		setContentView(R.layout.activity_kill);
         nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mDB = new DatabaseHelper(this);
 	}

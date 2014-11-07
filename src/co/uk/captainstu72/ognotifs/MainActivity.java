@@ -138,13 +138,16 @@ public class MainActivity extends Activity {
     public void restoreNotification(int id,String title, String text, String ticker, int icon, boolean autocancel, boolean ongoing) {
         Notification.Builder ncomp = new Notification.Builder(this);
         
-        Intent intent = new Intent(this, KillOffDialogActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent killIntent = new Intent(this, KillOffDialogActivity.class);
+        killIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_NOTIFICATION_ID, id);
-        intent.putExtras(bundle);
+        killIntent.putExtras(bundle);
         ncomp.setExtras(bundle);
-        PendingIntent activity = PendingIntent.getActivity(this, id, intent, 0);
+        PendingIntent killActivity = PendingIntent.getActivity(this, id, killIntent, 0);
+        
+//        Intent intentTestHangouts = new Intent(Intent.ACTION_SEND);
+//        PendingIntent hangoutsActivity = PendingIntent.getActivity(this, id, intentTestHangouts, 0);
 		
 		ncomp.setContentTitle(title)
 		.setContentText(text)
@@ -153,8 +156,8 @@ public class MainActivity extends Activity {
 		.setColor(this.getResources().getColor(R.color.md_primary_500))
 		.setAutoCancel(autocancel)
 		.setOngoing(ongoing)
-        .addAction(R.drawable.ic_done_24px, "Done", activity); //If we wanted to add a done button,
-		// we could also add an action to open an app...
+		.addAction(R.drawable.ic_done_24px, "Done", killActivity)
+		.addAction(R.drawable.ic_textsms_24px, "Open", killActivity);
 		
         //ncomp.setContentIntent(activity);
         Log.d("createNotification","KEY_NOTIFICATION_ID: " + id);

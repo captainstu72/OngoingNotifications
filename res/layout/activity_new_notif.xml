@@ -61,7 +61,7 @@
 	    android:background="@drawable/oval_ripple"
 	    android:elevation="@dimen/elevation_low"
 	    android:outlineProvider="background"
-	    android:src="@drawable/ic_add_24px"
+	    android:src="@drawable/ic_done_24px"
 	    android:stateListAnimator="@anim/button_elevation"
 	    android:tint="@android:color/white"
         android:onClick="buttonClicked"/>

@@ -372,8 +372,9 @@ reds
         public static final int ic_send_white_24dp=0x7f020006;
         public static final int ic_send_white_36dp=0x7f020007;
         public static final int ic_send_white_48dp=0x7f020008;
-        public static final int oval=0x7f020009;
-        public static final int oval_ripple=0x7f02000a;
+        public static final int ic_textsms_24px=0x7f020009;
+        public static final int oval=0x7f02000a;
+        public static final int oval_ripple=0x7f02000b;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f0b0006;
@@ -423,6 +424,7 @@ reds
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f090001;
+        public static final int KillTheme=0x7f090002;
     }
     public static final class transition {
         public static final int explode=0x7f050000;
